@@ -13,7 +13,7 @@ services:
       - ./data/mysql8.2:/var/lib/mysql
       - ./conf/mysql:/docker-sql
     ports:
-      - 33060:3306
+      - 33061:3306
     environment:
       TZ: ${TZ}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -37,7 +37,7 @@ services:
       - ./data/redis:/data
       - ./logs/redis:/logs
     ports:
-      - 63790:6379
+      - 63791:6379
     environment:
       - TZ:${TZ}
     command: redis-server /etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
