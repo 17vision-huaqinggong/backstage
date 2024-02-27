@@ -76,6 +76,7 @@ services:
         - ./www/nuxt:/www/nuxt
     depends_on:
       - php
+    command: nuxt dev
     networks: 
       - hqgnet
   nginx:
