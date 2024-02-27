@@ -1,0 +1,108 @@
+version: '3.9'
+services:
+  mysql:
+    build:
+      context: ./services/mysql
+      args:
+        IMAGE: mysql:8.2
+    image: hqg-mysql:8.2
+    container_name: hqg-mysql8.2
+    restart: always
+    privileged: false
+    volumes:
+      - ./data/mysql8.2:/var/lib/mysql
+      - ./conf/mysql:/docker-sql
+    ports:
+      - 33060:3306
+    environment:
+      TZ: ${TZ}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --lower_case_table_names=1
+    networks: 
+      - hqgnet
+  redis:
+    build:
+      context: ./services/redis
+      args:
+        IMAGE: redis:7.2
+    image: hqg-redis:7.2
+    container_name: hqg-redis7.2
+    restart: always
+    privileged: false
+    volumes:
+      - ./conf/redis/redis.conf:/etc/redis/redis.conf
+      - ./data/redis:/data
+      - ./logs/redis:/logs
+    ports:
+      - 63790:6379
+    environment:
+      - TZ:${TZ}
+    command: redis-server /etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
+    networks: 
+      - hqgnet
+  php:
+    build:
+      context: ./services/php
+      args:
+        IMAGE: php:8.3-fpm
+    image: hqg-php:8.3
+    container_name: hqg-php8.3
+    restart: always
+    privileged: false
+    volumes:
+        - ./www/laravel:/www/laravel
+        - ./conf/php/php.ini/:/usr/local/etc/php/php.ini
+        - ./logs/php:/var/log/php
+    environment:
+      - TZ:${TZ}
+    depends_on:
+      - redis
+      - mysql
+    networks: 
+      - hqgnet
+  node:
+    build:
+      context: ./services/node
+      args:
+        IMAGE: node:20
+    image: hqg-node:20
+    container_name: hqg-node20
+    restart: always
+    privileged: false
+    volumes:
+        - ./www/nuxt:/www/nuxt
+    depends_on:
+      - php
+    networks: 
+      - hqgnet
+  nginx:
+    build:
+      context: ./services/nginx
+      args:
+        IMAGE: nginx:1.25.3
+    image: hqg-nginx:1.25.3
+    container_name: hqg-nginx1.25.3
+    restart: always
+    privileged: false
+    ports:
+      - 8580:8580
+    volumes:
+      - ./conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./conf/nginx/conf.d:/etc/nginx/conf.d/
+      - ./conf/nginx/ssl:/etc/nginx/ssl
+      - ./logs/nginx:/var/log/nginx
+      - ./www:/www/
+    environment:
+      - TZ:${TZ}
+    depends_on:
+      - php
+    networks: 
+      - hqgnet
+networks:
+  hqgnet:
+    name: hqgnet
+    driver: bridge
+    
