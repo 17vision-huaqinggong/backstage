@@ -1,13 +1,17 @@
 <template>
-    <header class="w-full relative shadow-sm">
-        <div class="container flex items-center h-[104px]">
-            <img class="w-[211px] h-[60px] mr-10" src="../../assets/image/default/logo.png" alt="首页" />
+    <header class="w-full bg-white shadow-sm sticky top-0">
+        <div class="container flex items-center h-[72px]">
+            <NuxtLink to="/">
+                <img class="w-[128px] mr-10 cursor-pointer" src="../../assets/image/default/logo.png" alt="首页" />
+            </NuxtLink>
 
-            <span v-if="user.nickname" class="text-gray-600 text-[13px] cursor-pointer hover:text-black ml-3">{{ user.nickname }}</span>
-        </div>
+            <div class="flex items-center ml-auto">
+                <span v-if="user.nickname" class="text-gray-600 text-[15px] cursor-pointer font-semibold hover:text-black ml-3">{{ user.nickname }}</span>
 
-        <div>
-
+                <div class="w-[32px] h-[18px] ml-3 border-l-2 border-dotted cursor-pointer flex justify-end items-center card-exit">
+                    <img class="w-[20px] h-[25px] hover:opacity-60" src="../../assets/image/default/exit.png" alt="退出" @click="goExit" />
+                </div>
+            </div>
         </div>
     </header>
 </template>
@@ -16,6 +20,12 @@
 const user = useUser()
 
 if (!user.token) {
-    // navigateTo('/login')
+    navigateTo('/login')
+}
+
+function goExit() {
+    user.exit()
+
+    navigateTo('/login')
 }
 </script>

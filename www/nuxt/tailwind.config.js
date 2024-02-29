@@ -12,20 +12,20 @@ export default {
   ],
   theme: {
     screens: {
-      'sm': '1280px',
-      'md': '1280px',
-      'lg': '1440px',
-      'xl': '1536px',
-      '2xl': '1782px'
+      'sm': '1024px',
+      'md': '1024px',
+      'lg': '1280px',
+      'xl': '1440px',
+      '2xl': '1536px'
     },
     container: {
       center: true,
       padding: {
-        'sm': '4px',
-        'md': '4px',
-        'lg': '4px',
-        'xl': '8px',
-        '2xl': '16px'
+        'sm': '0px',
+        'md': '10px',
+        'lg': '10px',
+        'xl': '20px',
+        '2xl': '20px'
       },
     },
   },

@@ -12,8 +12,8 @@
 
 <script setup lang="ts">
 interface Props {
-    showClose: boolean,
-    content: string
+    showClose?: boolean,
+    content?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {

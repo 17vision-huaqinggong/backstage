@@ -1,3 +1,5 @@
+import { defineStore } from "pinia";
+
 interface UserState {
   token: string;
   id: number;
@@ -6,15 +8,31 @@ interface UserState {
 }
 
 export const useUser = defineStore("user", {
-  state: (): UserState => ({
-    token: "",
-    id: 0,
-    nickname: "",
-    avatar: "",
-  }),
-  actions: {},
-  // 注意：persist 定义要做判断，因为 localStorage/sessionStorage 是客户端参数，所以需要加 process.client
-  persist: process.client && {
-    storage: sessionStorage,
+  state: (): UserState => {
+    return {
+      token: "",
+      id: 0,
+      nickname: "",
+      avatar: "",
+    };
   },
+  actions: {
+    setUserInfo(value: Record<string, any>) {
+      const keys: Array<string> = ["id", "nickname", "avatar", "token"];
+      keys.forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(value, key)) {
+          this.$patch({ [key]: value[key] });
+        }
+      });
+    },
+    exit() {
+      this.$patch({
+        token: "",
+        id: 0,
+        nickname: "",
+        avatar: "",
+      });
+    },
+  },
+  persist: true,
 });
