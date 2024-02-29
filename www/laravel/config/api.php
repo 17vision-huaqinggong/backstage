@@ -11,11 +11,5 @@ return [
         'sign' =>  env('RATE_LIMITS_SIGN', '30,1'),
     ],
 
-    'secret' => env('API_SECRET', ''),
-
-    // 是否允许跨域（后台部分才需要）
-    'enable_cross' => env('ENABLE_CROSS', false),
-
-    // 允许跨的域
-    'allow_origin' => explode('|', env('ALLOW_ORIGIN', '')),
+    'secret' => env('API_SECRET', '')
 ];
