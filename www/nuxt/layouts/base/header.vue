@@ -19,10 +19,6 @@
 <script setup lang="ts">
 const user = useUser()
 
-if (!user.token) {
-    navigateTo('/login')
-}
-
 function goExit() {
     user.exit()
 
