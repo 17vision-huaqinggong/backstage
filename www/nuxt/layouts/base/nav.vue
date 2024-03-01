@@ -1,5 +1,5 @@
 <template>
-    <div class="flex w-[220px] h-full bg-white rounded-lg py-5">
+    <div class="flex flex-shrink-0 w-[220px] h-full bg-white rounded-lg py-5">
         <div v-for="(item, index) in navs" :key="index" class="nav-list">
             <div class="nav-item">
                 <span>{{ item.label }}</span>
@@ -7,8 +7,8 @@
             </div>
 
             <div v-if="item.childs?.length">
-                <div v-for="(child, childIndex) in item.childs" :key="childIndex">
-                    <div class="nav-item nav-item-sub" :class="{'nav-item-active': childIndex === 0}">
+                <div v-for="(child, childIndex) in item.childs" :key="childIndex" @click="goMuseum(child.path)">
+                    <div class="nav-item nav-item-sub" :class="{ 'nav-item-active': child.path === path }">
                         <span>{{ child.label }}</span>
                     </div>
                 </div>
@@ -19,44 +19,43 @@
 
 <script setup lang="ts">
 
-interface NavItem {
-    label: string
-    path: string
-    childs?: NavItem[]
+import navData from '../../assets/data/nav'
+
+const route = useRoute()
+
+const path = ref<string>('')
+
+const navs = ref<NavItem[]>(navData.navlist)
+
+function getFirstPath() {
+    if (navs.value.length > 0 && navs.value[0]['childs']?.length && navs.value[0]['childs']?.length > 0) {
+        return navs.value[0]['childs'][0]['path']
+    }
+    return ''
 }
 
-const navs = ref<NavItem[]>([
-    {
-        label: '展馆列表',
-        path: '/',
-        childs: [
-            {
-                label: '长恨歌艺术馆',
-                path: 'changhenge'
-            },
-            {
-                label: '珍宝馆',
-                path: ''
-            },
-            {
-                label: '海棠馆',
-                path: ''
-            },
-            {
-                label: '莲花汤',
-                path: ''
-            },
-            {
-                label: '梨园博物馆',
-                path: ''
-            },
-            {
-                label: '按歌台',
-                path: ''
+function goMuseum(value: string) {
+    path.value = value
+    navigateTo('/museum?path=' + value)
+}
+
+function initialize() {
+    // 博物馆路由
+    if (route.path === '/museum') {
+        if (!route.query.path) {
+            return navigateTo('/museum?path=' + getFirstPath())
+        }
+
+        if (typeof route.query.path?.toString() === 'string') {
+            if (navData.whiteList.indexOf(route.query.path?.toString()) === -1) {
+                return navigateTo('/museum?path=' + getFirstPath())
             }
-        ]
+            path.value = route.query.path?.toString()
+        }
     }
-])
+}
+
+initialize()
 </script>
 
 
