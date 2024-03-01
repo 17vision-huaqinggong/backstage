@@ -24,11 +24,23 @@ class AuthorizationController extends Controller
         $data = $request->only(['account','password']);
 
         if (Auth::validate($data)) {
-            $user = User::where('account', $data['account'])->first(['id', 'nickname', 'phone', 'gender', 'avatar', 'email']);
+            $user = User::where('account', $data['account'])->with('admin')->first();
+            if (!$user->admin || $user->admin->status != 1) {
+                return response()->json(['message' => '请联系管理员'], 403);
+            }
 
-            $user['token'] = $user->createToken('auth')->plainTextToken;
-
-            return response()->json($user);
+            $data = [
+                'id' => $user->id,
+                'nickname' => $user->nickname,
+                'phone' => $user->phone,
+                'gender' => $user->gener,
+                'avatar' => $user->avatar,
+                'email' => $user->email,
+                'rank' => $user->admin->rank,
+                'username' => $user->admin->username,
+                'token' => $user->createToken('auth')->plainTextToken
+            ];
+            return response()->json($data);
         } else {
             return response()->json(['message' => '账号或密码错误'], 403);
         }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Admin;
 
 class UserSeeder extends Seeder
 {
@@ -32,6 +33,13 @@ class UserSeeder extends Seeder
             'email_verified_at' => Carbon::now()->toDateTimeString(),
             'remember_token' => $remember_token
         ];
-        User::create($data);
+        $user = User::create($data);
+
+        // 创建管理员
+        $admin = Admin::create([
+            'user_id' => $user->id,
+            'username' => $user->nickname,
+            'rank' => 1
+        ]);
     }
 }
