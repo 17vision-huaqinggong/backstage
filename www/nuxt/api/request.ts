@@ -19,12 +19,11 @@ const request = async (url:string, options:Record<string, any>) => {
     return new Promise((resolve, reject) => {
         useFetch(url, {...options}).then(({data, error}) => {
             if (error && error.value) {
-                const useError = error.value as { [key: string]: any };  
-                if (useError.statusCode === '401') {
+                if (error.value?.statusCode === 401) {
                     getUser().exit()
                     navigateTo('/login')
                 }
-                return reject(useError.data)
+                return reject(error.value.data)
             }
             resolve(data.value)
         })

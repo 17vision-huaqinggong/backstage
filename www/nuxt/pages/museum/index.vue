@@ -8,12 +8,13 @@
                 <div class="dropdown dropdown-bottom dropdown-end">
                     <div tabindex="0" class="flex items-center px-3 py-[5px] mb-1 border border-stone-300 rounded cursor-pointer">
                         <img class="w-[15px]" src="../../assets/image/default/date.png" alt="日期">
-                        <span class="text-sm  text-stone-700 ml-2 mr-6">今天</span>
+                        <span class="text-sm  text-stone-700 ml-2 mr-6">{{ dayStr }}</span>
                         <img class="w-[12px] opacity-60" src="../../assets/image/default/down.png" alt="">
                     </div>
 
                     <div tabindex="0" class="dropdown-content z-[1] shadow bg-base-100 w-40 day-list">
-                        <div v-for="(item, index) in days" :key="index" class="day-item" :class="{ 'day-item-active': item.active }">
+                        <div v-for="(item, index) in days" :key="index" class="day-item" :class="{ 'day-item-active': item.active }"
+                            @click="selectBaseDay(index)">
                             {{ item.label }}
                         </div>
                     </div>
@@ -23,8 +24,8 @@
             <div class="flex">
                 <div class="flex justify-between w-[350px] h-[150px] px-5 rounded-md mr-4" style="background-color: #4BAF5045">
                     <div class="flex flex-col mt-5">
-                        <span style="font-size: 14px; color: #38BA3B;">当天佩戴量</span> 
-                        <span class="mt-1" style="font-size: 44px; color: #039B14;">30</span>
+                        <span style="font-size: 14px; color: #38BA3B;">{{ dayStr }} 佩戴量</span>
+                        <span class="mt-1" style="font-size: 44px; color: #039B14;">{{ deviceBase.wears_count }}</span>
                     </div>
 
                     <img class="w-[118px] h-[105px] self-center" src="../../assets/image/museum/peidai.png" slot="佩戴量" />
@@ -32,8 +33,8 @@
 
                 <div class="flex justify-between w-[350px] h-[150px] px-5 rounded-md" style="background-color: #4B65AF45">
                     <div class="flex flex-col mt-5">
-                        <span style="font-size: 14px; color: #387FBA;">当天浏览量</span>
-                        <span class="mt-1" style="font-size: 44px; color: #035B9B;">30</span>
+                        <span style="font-size: 14px; color: #387FBA;">{{ dayStr }} 浏览量</span>
+                        <span class="mt-1" style="font-size: 44px; color: #035B9B;">{{ deviceBase.visits_count }}</span>
                     </div>
 
                     <img class="w-[112px] h-[107px] self-center" src="../../assets/image/museum/liulan.png" slot="佩戴量" />
@@ -54,12 +55,24 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
-watch(() => route.fullPath, (value: string) => {
-    console.log('vvv', value)
-}, {
-    immediate: true
+
+import { GetDeciveBase, GetDeciveDetail } from '@/api/api'
+
+interface DeviceBase {
+    wears_count: number
+    visits_count: number
+}
+
+const deviceBase = ref<DeviceBase>({
+    wears_count: 0,
+    visits_count: 0
 })
+
+const route = useRoute()
+
+let loading: boolean = false
+let day: number = 0
+let scene_id: number = 0
 
 const days = ref([
     {
@@ -83,6 +96,57 @@ const days = ref([
         active: false
     }
 ])
+
+const dayStr = ref<string>('今天')
+
+watch(() => route.fullPath, (value: string) => {
+    console.log('vvv', value)
+    console.log(route.query.id, typeof route.query.id)
+    if (route.query.id && typeof route.query.id === 'string') {
+        scene_id = parseInt(route.query.id)
+
+        getDeciveBase()
+    }
+}, {
+    immediate: true
+})
+
+function selectBaseDay(value: number) {
+    days.value.forEach((item, _) => {
+        item.active = false
+    })
+
+    day = days.value[value].value
+    days.value[value].active = true
+
+    dayStr.value = days.value[value].label
+
+    getDeciveBase()
+}
+
+function getDeciveBase() {
+    if (loading) {
+        return
+    }
+    loading = true
+
+    GetDeciveBase({
+        scene_id: scene_id,
+        days: day
+    }).then((res: any) => {
+        deviceBase.value.wears_count = res.wears_count
+        deviceBase.value.visits_count = res.visits_count
+        loading = false
+    }).catch(() => {
+        loading = false
+    })
+}
+
+
+function getDeciveDetail() {
+    GetDeciveDetail({});
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -118,4 +182,3 @@ const days = ref([
     }
 }
 </style>
-

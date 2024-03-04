@@ -36,21 +36,21 @@ function getFirstId() {
 
 function goMuseum(value: number) {
     id.value = value
-    navigateTo('/museum?path=' + value)
+    navigateTo('/museum?id=' + value)
 }
 
 function initialize() {
     // 博物馆路由
     if (route.path === '/museum') {
-        if (!route.query.path) {
-            return navigateTo('/museum?path=' + getFirstId())
+        if (!route.query.id) {
+            return navigateTo('/museum?id=' + getFirstId())
         }
 
-        if (typeof route.query.id === 'number') {
-            if (navData.whiteList.indexOf(route.query.id) === -1) {
+        if (typeof route.query.id === 'string') {
+            if (navData.whiteList.indexOf(parseInt(route.query.id)) === -1) {
                 return navigateTo('/museum?id=' + getFirstId())
             }
-            id.value = route.query.id
+            id.value = parseInt(route.query.id)
         }
     }
 }
