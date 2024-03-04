@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use App\Models\DeviceAccess;
+use App\Models\DeviceVisit;
 use App\Models\DeviceWear;
 use Carbon\Carbon;
 
@@ -56,7 +56,7 @@ class DeviceController extends Controller
         $data['date'] = (int)Carbon::now()->format('Ymd');
 
         if ($request->duration) {
-            $result = DeviceAccess::query()->where('scene_uuid', $data['scene_uuid'])->where('scene_id', $data['scene_id'])
+            $result = DeviceVisit::query()->where('scene_uuid', $data['scene_uuid'])->where('scene_id', $data['scene_id'])
                 ->orderBy('id', 'desc')->update(['duration' => $request->duration]);
 
 
@@ -65,7 +65,7 @@ class DeviceController extends Controller
             }
         }
 
-        $result = DeviceAccess::create($data);
+        $result = DeviceVisit::create($data);
 
         return response()->json($result);
     }

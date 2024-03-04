@@ -12,8 +12,8 @@ return new class extends Migration
     {
         Schema::create('device_wears', function (Blueprint $table) {
             $table->id();
-            $table->string('scene_uuid')->comment('场景 uuid');
-            $table->unsignedInteger('scene_id')->comment('场景ID');
+            $table->string('scene_uuid')->comment('场景 uuid')->index();
+            $table->unsignedInteger('scene_id')->comment('场景ID')->index();
             $table->string('scene_name')->comment('场景名字，如长恨歌馆');
             $table->unsignedInteger('date')->comment('创建日期， 如20240301');
             $table->timestamps();

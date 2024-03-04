@@ -19,6 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('test', function() {
+    return 'test';
+});
+
 Route::post('wears', [DeviceController::class, 'addWears']);
 
 Route::post('visits', [DeviceController::class, 'addVisits']);
