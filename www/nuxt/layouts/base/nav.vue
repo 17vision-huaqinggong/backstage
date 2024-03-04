@@ -7,8 +7,8 @@
             </div>
 
             <div v-if="item.childs?.length">
-                <div v-for="(child, childIndex) in item.childs" :key="childIndex" @click="goMuseum(child.path)">
-                    <div class="nav-item nav-item-sub" :class="{ 'nav-item-active': child.path === path }">
+                <div v-for="(child, childIndex) in item.childs" :key="childIndex" @click="goMuseum(child.id)">
+                    <div class="nav-item nav-item-sub" :class="{ 'nav-item-active': child.id === id }">
                         <span>{{ child.label }}</span>
                     </div>
                 </div>
@@ -23,19 +23,19 @@ import navData from '../../assets/data/nav'
 
 const route = useRoute()
 
-const path = ref<string>('')
+const id = ref<number>()
 
 const navs = ref<NavItem[]>(navData.navlist)
 
-function getFirstPath() {
+function getFirstId() {
     if (navs.value.length > 0 && navs.value[0]['childs']?.length && navs.value[0]['childs']?.length > 0) {
-        return navs.value[0]['childs'][0]['path']
+        return navs.value[0]['childs'][0]['id']
     }
     return ''
 }
 
-function goMuseum(value: string) {
-    path.value = value
+function goMuseum(value: number) {
+    id.value = value
     navigateTo('/museum?path=' + value)
 }
 
@@ -43,14 +43,14 @@ function initialize() {
     // 博物馆路由
     if (route.path === '/museum') {
         if (!route.query.path) {
-            return navigateTo('/museum?path=' + getFirstPath())
+            return navigateTo('/museum?path=' + getFirstId())
         }
 
-        if (typeof route.query.path?.toString() === 'string') {
-            if (navData.whiteList.indexOf(route.query.path?.toString()) === -1) {
-                return navigateTo('/museum?path=' + getFirstPath())
+        if (typeof route.query.id === 'number') {
+            if (navData.whiteList.indexOf(route.query.id) === -1) {
+                return navigateTo('/museum?id=' + getFirstId())
             }
-            path.value = route.query.path?.toString()
+            id.value = route.query.id
         }
     }
 }
