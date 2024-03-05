@@ -63,6 +63,7 @@ services:
       - mysql
     networks: 
       - hqgnet
+  # node 暂时不启动，等到 nuxt 编译好 
   node:
     build:
       context: ./services/node
@@ -72,11 +73,13 @@ services:
     container_name: hqg-node20
     restart: always
     privileged: false
+    ports:
+      - 3500:3500
     volumes:
         - ./www/nuxt:/www/nuxt
     depends_on:
       - php
-    command: nuxt dev
+    command: node /www/nuxt/.output/server/index.mjs
     networks: 
       - hqgnet
   nginx:
