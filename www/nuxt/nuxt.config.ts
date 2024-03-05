@@ -8,5 +8,8 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@pinia/nuxt", "@pinia-plugin-persistedstate/nuxt"],
   css: ["@/assets/css/main.scss"],
+  build: {
+    transpile:[/echarts/]
+  },
   postcss,
 });

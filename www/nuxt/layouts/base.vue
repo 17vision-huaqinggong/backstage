@@ -1,5 +1,5 @@
 <template>
-    <Header />
+    <Header class="z-50" />
     <div class="container body">
         <Nav />
 
@@ -17,9 +17,14 @@ import Nav from './base/nav.vue'
 </script>
 
 <style lang="scss" scoped>
+body {
+    min-width: 780px;
+}
+
 .body {
     display: flex;
     margin-top: 20px;
+    margin-bottom: 20px;
 
     .content {
         width: 100%;

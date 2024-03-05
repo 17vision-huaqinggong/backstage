@@ -6,8 +6,8 @@
                 <img class="w-[16px] ml-auto" src="../../assets/image/default/down.png" alt="">
             </div>
 
-            <div v-if="item.childs?.length">
-                <div v-for="(child, childIndex) in item.childs" :key="childIndex" @click="goMuseum(child.id)">
+            <div v-if="item.childs?.length" class="nav-child-list">
+                <div v-for="(child, childIndex) in item.childs" :key="childIndex" @click="goMuseum(child.id)" class="nav-child-item">
                     <div class="nav-item nav-item-sub" :class="{ 'nav-item-active': child.id === id }">
                         <span>{{ child.label }}</span>
                     </div>
@@ -31,7 +31,7 @@ function getFirstId() {
     if (navs.value.length > 0 && navs.value[0]['childs']?.length && navs.value[0]['childs']?.length > 0) {
         return navs.value[0]['childs'][0]['id']
     }
-    return ''
+    return 1
 }
 
 function goMuseum(value: number) {
@@ -43,7 +43,8 @@ function initialize() {
     // 博物馆路由
     if (route.path === '/museum') {
         if (!route.query.id) {
-            return navigateTo('/museum?id=' + getFirstId())
+            id.value = getFirstId()
+            return navigateTo('/museum?id=' + id.value)
         }
 
         if (typeof route.query.id === 'string') {
@@ -104,6 +105,12 @@ initialize()
             background-color: #FFF5E5;
             color: #FDA51B;
             font-weight: 600;
+        }
+    }
+
+    .nav-child-item:last-child {
+        span {
+            border: none;
         }
     }
 }

@@ -18,3 +18,35 @@
         }
     }
 }
+
+
+/* 定义浏览器下拉条样式 */
+body::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+body::-webkit-scrollbar-button {
+    display: none;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: #304156;
+}
+
+body::-webkit-scrollbar-track-piece {
+    background: #ffffff;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #8e8e8e;
+    border-radius: 3px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #3b3b3b;
+}
+
+body::-webkit-scrollbar-resizer {
+    background-color:#fff;
+}

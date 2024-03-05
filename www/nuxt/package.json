@@ -3,16 +3,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
+    "build": "nuxt build --port=3500",
+    "dev": "nuxt dev --port=3500",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@antv/g2": "^5.1.15",
     "@pinia/nuxt": "^0.5.1",
+    "echarts": "^5.5.0",
     "nuxt": "^3.10.3",
     "vue": "^3.4.19",
+    "vue-echarts": "^6.6.9",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {

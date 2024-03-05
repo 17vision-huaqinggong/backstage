@@ -1,5 +1,5 @@
 <template>
-    <header class="w-full bg-white shadow-sm sticky top-0">
+    <header class="w-full shadow-sm sticky top-0 bg-white/80 backdrop-blur">
         <div class="container flex items-center h-[72px]">
             <NuxtLink to="/">
                 <img class="w-[128px] mr-10 cursor-pointer" src="../../assets/image/default/logo.png" alt="首页" />

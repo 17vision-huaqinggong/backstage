@@ -21,11 +21,11 @@ export default {
     container: {
       center: true,
       padding: {
-        'sm': '0px',
+        'sm': '10px',
         'md': '10px',
-        'lg': '10px',
-        'xl': '20px',
-        '2xl': '20px'
+        'lg': '20px',
+        'xl': '30px',
+        '2xl': '30px'
       },
     },
   },
