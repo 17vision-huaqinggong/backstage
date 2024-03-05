@@ -5,11 +5,14 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
-use App\Models\DeviceWear;
+use App\Models\DeviceVisit;
 use Carbon\Carbon;
 
-class DeviceWearSeeder extends Seeder
+class DeviceVisitSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         $scenes = [
@@ -39,15 +42,32 @@ class DeviceWearSeeder extends Seeder
             ]
         ];
 
-        $deviceWear = DeviceWear::query()->orderBy('id', 'desc')->first();
-        if ($deviceWear) {
-            $lastDate = Carbon::parse($deviceWear->created_at);
-        }  else {
+        $points = [
+            [
+                'name' => '点位 1',
+                'id' => 1
+            ],
+            [
+                'name' => '点位 2',
+                'id' => 2
+            ],
+            [
+                'name' => '点位 3',
+                'id' => 3
+            ]
+        ];
+
+        $deviceVisit = DeviceVisit::query()->orderBy('id', 'desc')->first();
+        if ($deviceVisit) {
+            $lastDate = Carbon::parse($deviceVisit->created_at);
+        } else {
             $lastDate = Carbon::now()->subDays(25);
         }
 
-        for($i = 0; $i < 400; $i++) {
+        for ($i = 0; $i < 400; $i++) {
             $scene = Arr::random($scenes);
+
+            $point = Arr::random($points);
 
             $minutes = rand(30, 100);
 
@@ -58,13 +78,21 @@ class DeviceWearSeeder extends Seeder
                 break;
             }
 
-            DeviceWear::create([
+            $data = [
                 'scene_uuid' => '85288F8D-6B48-BBE8-4D78-8322862D0D32',
                 'scene_id' => $scene['id'],
                 'scene_name' => $scene['name'],
                 'date' => (int)$lastDate->format('Ymd'),
+                'point_id' => $point['id'],
+                'point_name' => $point['name'],
                 'created_at' => $lastDate->toDateTimeString()
-            ]);
+            ];
+
+            if (rand(1, 100) % 3 === 0) {
+                $data['duration'] = rand(1, 100);
+            }
+
+            DeviceVisit::create($data);
         }
     }
 }
