@@ -116,23 +116,19 @@ const lineData = {
 const dayData = [
     {
         label: '今天',
-        value: 0,
-        active: true
+        value: 0
     },
     {
         label: '近 7 天',
-        value: 7,
-        active: false
+        value: 7
     },
     {
         label: '近 15 天',
-        value: 15,
-        active: false
+        value: 15
     },
     {
         label: '近 30 天',
-        value: 30,
-        active: false
+        value: 30
     }
 ]
 

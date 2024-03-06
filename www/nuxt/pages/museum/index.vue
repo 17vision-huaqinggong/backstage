@@ -13,7 +13,7 @@
                     </div>
 
                     <div tabindex="0" class="dropdown-content z-[1] shadow bg-base-100 w-40 day-list">
-                        <div v-for="(item, index) in totalDays" :key="index" class="day-item" :class="{ 'day-item-active': item.active }"
+                        <div v-for="(item, index) in totalDays" :key="index" class="day-item" :class="{ 'day-item-active': item.value === totalDay }"
                             @click="selectBaseDay(index)">
                             {{ item.label }}
                         </div>
@@ -53,7 +53,7 @@
                     </div>
 
                     <div tabindex="0" class="dropdown-content z-[1] shadow bg-base-100 w-40 day-list">
-                        <div v-for="(item, index) in listDays" :key="index" class="day-item" :class="{ 'day-item-active': item.active }"
+                        <div v-for="(item, index) in listDays" :key="index" class="day-item" :class="{ 'day-item-active': item.value === listDay }"
                             @click="selectDetailDay(index)">
                             {{ item.label }}
                         </div>
@@ -62,7 +62,7 @@
             </div>
 
             <client-only>
-                <v-chart class="chart mt-5" :option="option" />
+                <v-chart class="chart mt-5" ref="chartRef" :option="option" />
             </client-only>
         </div>
     </NuxtLayout>
@@ -91,8 +91,8 @@ const deviceBase = ref<DeviceBase>({
 
 const route = useRoute()
 
+const chartRef = ref<InstanceType<typeof VChart> | null>(null)
 const option = ref(lineData);
-
 
 let scene_id: number = 0
 
@@ -105,6 +105,18 @@ let listDay: number = 0
 let listLoading: boolean = false
 const listDays = ref(dayData)
 const listDayStr = ref<string>('今天')
+
+onMounted(() => {
+    window.addEventListener('resize', resizeHandler)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('resize', resizeHandler)
+})
+
+function resizeHandler() {
+    chartRef.value?.resize()
+}
 
 watch(() => route.fullPath, (value: string) => {
     console.log('vvv', value)

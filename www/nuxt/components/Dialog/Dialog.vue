@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const open = function() {
-    document.getElementById('dialogCom').showModal()
+    document.getElementById('dialogCom')?.showModal()
 }
 
 defineExpose({
