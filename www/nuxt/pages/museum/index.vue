@@ -22,7 +22,7 @@
             </div>
 
             <div class="flex flex-col md:flex-row mt-3">
-                <div class="flex justify-between w-[350px] h-[150px] px-5 rounded-md mr-4" style="background-color: #4BAF5045">
+                <div class="flex justify-between w-[350px] h-[150px] border px-5 rounded-md mr-4" style="background-color: #F2FFEDFF;border-color: #4BAF5073;">
                     <div class="flex flex-col mt-5">
                         <span style="font-size: 14px; color: #38BA3B;">{{ totalDayStr }} 佩戴量</span>
                         <span class="mt-1" style="font-size: 44px; color: #039B14;">{{ deviceBase.wears_count }}</span>
@@ -31,7 +31,7 @@
                     <img class="w-[118px] h-[105px] self-center" src="../../assets/image/museum/peidai.png" slot="佩戴量" />
                 </div>
 
-                <div class="flex mt-4 md:mt-0 justify-between w-[350px] h-[150px] px-5 rounded-md" style="background-color: #4B65AF45">
+                <div class="flex mt-4 md:mt-0 justify-between w-[350px] h-[150px] border px-5 rounded-md" style="background-color:#EDF4FFFF;border-color:#4B65AF73;">
                     <div class="flex flex-col mt-5">
                         <span style="font-size: 14px; color: #387FBA;">{{ totalDayStr }} 浏览量</span>
                         <span class="mt-1" style="font-size: 44px; color: #035B9B;">{{ deviceBase.visits_count }}</span>
@@ -133,12 +133,11 @@ watch(() => route.fullPath, (value: string) => {
 })
 
 function selectBaseDay(value: number) {
-    totalDays.value.forEach((item, _) => {
-        item.active = false
-    })
+    if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+    }
 
     totalDay = totalDays.value[value].value
-    totalDays.value[value].active = true
 
     totalDayStr.value = totalDays.value[value].label
 
@@ -146,12 +145,11 @@ function selectBaseDay(value: number) {
 }
 
 function selectDetailDay(value: number) {
-    listDays.value.forEach((item, _) => {
-        item.active = false
-    })
+    if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+    }
 
     listDay = listDays.value[value].value
-    listDays.value[value].active = true
 
     listDayStr.value = listDays.value[value].label
 
@@ -229,6 +227,6 @@ function getDeciveDetail() {
 }
 
 .chart {
-    height: 500px;
+    height: 450px;
 }
 </style>

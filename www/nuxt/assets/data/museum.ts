@@ -38,6 +38,12 @@ const lineData = {
     axisLabel: {
       formatter: "{value}",
     },
+    splitLine: {
+      show: true,
+      lineStyle: {
+        type: "dashed",
+      },
+    },
   },
   series: [
     {
@@ -55,25 +61,25 @@ const lineData = {
         color: "#38BA3B",
       },
       // 区域的颜色
-    //   areaStyle: {
-    //     color: {
-    //       type: "linear",
-    //       x: 0,
-    //       y: 0,
-    //       x2: 0,
-    //       y2: 1,
-    //       colorStops: [
-    //         {
-    //           offset: 0,
-    //           color: "#38BA3B", // 0% 处的颜色
-    //         },
-    //         {
-    //           offset: 1,
-    //           color: "#ffffff", // 100% 处的颜色
-    //         },
-    //       ],
-    //     },
-    //   },
+      //   areaStyle: {
+      //     color: {
+      //       type: "linear",
+      //       x: 0,
+      //       y: 0,
+      //       x2: 0,
+      //       y2: 1,
+      //       colorStops: [
+      //         {
+      //           offset: 0,
+      //           color: "#38BA3B", // 0% 处的颜色
+      //         },
+      //         {
+      //           offset: 1,
+      //           color: "#ffffff", // 100% 处的颜色
+      //         },
+      //       ],
+      //     },
+      //   },
     },
     {
       name: "设备浏览量",
@@ -90,46 +96,46 @@ const lineData = {
         color: "#387FBA",
       },
       //   区域的颜色
-    //   areaStyle: {
-    //     color: {
-    //       type: "linear",
-    //       x: 0,
-    //       y: 0,
-    //       x2: 0,
-    //       y2: 1,
-    //       colorStops: [
-    //         {
-    //           offset: 0,
-    //           color: "#387FBA", // 0% 处的颜色
-    //         },
-    //         {
-    //           offset: 1,
-    //           color: "#ffffff", // 100% 处的颜色
-    //         },
-    //       ],
-    //     },
-    //   },
+      //   areaStyle: {
+      //     color: {
+      //       type: "linear",
+      //       x: 0,
+      //       y: 0,
+      //       x2: 0,
+      //       y2: 1,
+      //       colorStops: [
+      //         {
+      //           offset: 0,
+      //           color: "#387FBA", // 0% 处的颜色
+      //         },
+      //         {
+      //           offset: 1,
+      //           color: "#ffffff", // 100% 处的颜色
+      //         },
+      //       ],
+      //     },
+      //   },
     },
   ],
 };
 
 const dayData = [
-    {
-        label: '今天',
-        value: 0
-    },
-    {
-        label: '近 7 天',
-        value: 7
-    },
-    {
-        label: '近 15 天',
-        value: 15
-    },
-    {
-        label: '近 30 天',
-        value: 30
-    }
-]
+  {
+    label: "今天",
+    value: 0,
+  },
+  {
+    label: "近 7 天",
+    value: 7,
+  },
+  {
+    label: "近 15 天",
+    value: 15,
+  },
+  {
+    label: "近 30 天",
+    value: 30,
+  },
+];
 
-export { lineData, dayData }
+export { lineData, dayData };
