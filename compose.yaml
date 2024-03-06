@@ -74,12 +74,12 @@ services:
     restart: always
     privileged: false
     ports:
-      - 3500:3500
+      - 3500:3000
     volumes:
         - ./www/nuxt:/www/nuxt
     depends_on:
       - php
-    command: node /www/nuxt/.output/server/index.mjs
+    command: node /www/nuxt/.output/server/index.mjs --port 3500
     networks: 
       - hqgnet
   nginx:
