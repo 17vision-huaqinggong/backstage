@@ -79,7 +79,7 @@ services:
         - ./www/nuxt:/www/nuxt
     depends_on:
       - php
-    # command: node /www/nuxt/.output/server/index.mjs --port 3500
+    command: node /www/nuxt/.output/server/index.mjs --port 3500
     networks: 
       - hqgnet
   nginx:
