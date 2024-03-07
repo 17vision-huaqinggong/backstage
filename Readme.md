@@ -1,3 +1,12 @@
+### 打包镜像
+
+```
+# 在打包镜像之前，先运行镜像，构建容器
+docker-compose up -d
+
+docker save -o huaqinggong.tar hqg-mysql:8.2 hqg-nginx:1.25.3 hqg-node:20 hqg-php:8.3 hqg-redis:7.2
+```
+
 ### 命令
 
 **make** 直接命令，会输出提示。

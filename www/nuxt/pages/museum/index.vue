@@ -5,24 +5,14 @@
             <div class="flex justify-between">
                 <span class="title-color text-base font-semibold">总量统计</span>
 
-                <div class="dropdown dropdown-bottom dropdown-end">
-                    <div tabindex="0" class="flex items-center px-3 py-[5px] mb-1 border border-stone-300 rounded cursor-pointer">
-                        <img class="w-[15px]" src="../../assets/image/default/date.png" alt="日期">
-                        <span class="text-sm  text-stone-700 ml-2 mr-6">{{ totalDayStr }}</span>
-                        <img class="w-[12px] opacity-60" src="../../assets/image/default/down.png" alt="">
-                    </div>
-
-                    <div tabindex="0" class="dropdown-content z-[1] shadow bg-base-100 w-40 day-list">
-                        <div v-for="(item, index) in totalDays" :key="index" class="day-item" :class="{ 'day-item-active': item.value === totalDay }"
-                            @click="selectBaseDay(index)">
-                            {{ item.label }}
-                        </div>
-                    </div>
-                </div>
+                <client-only>
+                    <MuseumDate :hasCalendar="false" @on-change-day="onChangeTotalDay" />
+                </client-only>
             </div>
 
             <div class="flex flex-col md:flex-row mt-3">
-                <div class="flex justify-between w-[350px] h-[150px] border px-5 rounded-md mr-4" style="background-color: #F2FFEDFF;border-color: #4BAF5073;">
+                <div class="flex justify-between w-[350px] h-[150px] border px-5 rounded-md mr-4"
+                    style="background-color: #F2FFEDFF;border-color: #4BAF5073;">
                     <div class="flex flex-col mt-5">
                         <span style="font-size: 14px; color: #38BA3B;">{{ totalDayStr }} 佩戴量</span>
                         <span class="mt-1" style="font-size: 44px; color: #039B14;">{{ deviceBase.wears_count }}</span>
@@ -31,7 +21,8 @@
                     <img class="w-[118px] h-[105px] self-center" src="../../assets/image/museum/peidai.png" slot="佩戴量" />
                 </div>
 
-                <div class="flex mt-4 md:mt-0 justify-between w-[350px] h-[150px] border px-5 rounded-md" style="background-color:#EDF4FFFF;border-color:#4B65AF73;">
+                <div class="flex mt-4 md:mt-0 justify-between w-[350px] h-[150px] border px-5 rounded-md"
+                    style="background-color:#EDF4FFFF;border-color:#4B65AF73;">
                     <div class="flex flex-col mt-5">
                         <span style="font-size: 14px; color: #387FBA;">{{ totalDayStr }} 浏览量</span>
                         <span class="mt-1" style="font-size: 44px; color: #035B9B;">{{ deviceBase.visits_count }}</span>
@@ -45,20 +36,9 @@
             <div class="flex justify-between mt-8">
                 <span class="title-color text-base font-semibold">用户增长趋势</span>
 
-                <div class="dropdown dropdown-bottom dropdown-end">
-                    <div tabindex="0" class="flex items-center px-3 py-[5px] mb-1 border border-stone-300 rounded cursor-pointer">
-                        <img class="w-[15px]" src="../../assets/image/default/date.png" alt="日期">
-                        <span class="text-sm  text-stone-700 ml-2 mr-6">{{ listDayStr }}</span>
-                        <img class="w-[12px] opacity-60" src="../../assets/image/default/down.png" alt="">
-                    </div>
-
-                    <div tabindex="0" class="dropdown-content z-[1] shadow bg-base-100 w-40 day-list">
-                        <div v-for="(item, index) in listDays" :key="index" class="day-item" :class="{ 'day-item-active': item.value === listDay }"
-                            @click="selectDetailDay(index)">
-                            {{ item.label }}
-                        </div>
-                    </div>
-                </div>
+                <client-only>
+                    <MuseumDate @on-change-day="onChangeListDay" />
+                </client-only>
             </div>
 
             <client-only>
@@ -73,7 +53,7 @@ import VChart, { THEME_KEY } from 'vue-echarts';
 import { use } from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import { GetDeciveBase, GetDeciveDetail } from '@/api/api'
-import { lineData, dayData } from '@/assets/data/museum'
+import { lineData } from '@/assets/data/museum'
 
 use([
     LineChart
@@ -98,13 +78,10 @@ let scene_id: number = 0
 
 let totalDay: number = 0
 let totalLoading: boolean = false
-const totalDays = ref(dayData)
 const totalDayStr = ref<string>('今天')
 
-let listDay: number = 0
+let listDay: number | string = 0
 let listLoading: boolean = false
-const listDays = ref(dayData)
-const listDayStr = ref<string>('今天')
 
 onMounted(() => {
     window.addEventListener('resize', resizeHandler)
@@ -132,26 +109,15 @@ watch(() => route.fullPath, (value: string) => {
     immediate: true
 })
 
-function selectBaseDay(value: number) {
-    if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur()
-    }
-
-    totalDay = totalDays.value[value].value
-
-    totalDayStr.value = totalDays.value[value].label
+function onChangeTotalDay(value: any) {
+    totalDay = value.day
+    totalDayStr.value = value.dayStr
 
     getDeciveBase()
 }
 
-function selectDetailDay(value: number) {
-    if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.blur()
-    }
-
-    listDay = listDays.value[value].value
-
-    listDayStr.value = listDays.value[value].label
+function onChangeListDay(value: any) {
+    listDay = value.day
 
     getDeciveDetail()
 }
@@ -200,30 +166,6 @@ function getDeciveDetail() {
 
 .title-color-1 {
     color: #00000073;
-}
-
-.day-list {
-    border-radius: 4px;
-
-    .day-item {
-        display: flex;
-        align-items: center;
-        width: 100%;
-        height: 40px;
-        padding: 0 20px;
-        font-size: 13px;
-        cursor: pointer;
-
-        &.day-item-active {
-            background-color: #2750A012;
-            color: #FDA51B;
-        }
-    }
-
-    .day-item:hover {
-        background-color: #2750A012;
-        color: #FDA51B;
-    }
 }
 
 .chart {
