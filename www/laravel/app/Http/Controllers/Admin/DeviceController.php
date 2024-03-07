@@ -36,7 +36,7 @@ class DeviceController extends Controller
     {
         $request->validate([
             'scene_id' => 'required|integer',
-            'days' => 'required|in:0,7,15,30'
+            'days' => 'required'
         ], [], [
             'scene_id' => '场景 id',
             'days' => '天数'
@@ -44,7 +44,9 @@ class DeviceController extends Controller
 
         $scene_id = $request->scene_id;
 
-        $day = Carbon::now()->startOfDay()->subDays($request->days)->toDateTimeString();
+        if (is_int($request->days)) {
+            $day = Carbon::now()->startOfDay()->subDays($request->days)->toDateTimeString();
+        }
 
         // 对日期和小时都进行了分组
         // $wears = DeviceWear::where('scene_id', $scene_id)
@@ -58,8 +60,15 @@ class DeviceController extends Controller
         $hours = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
         // 佩戴量（只对小时进行分组）
-        $wears = DeviceWear::where('scene_id', $scene_id)
-            ->where('created_at', '>=', $day)
+        $query = DeviceWear::query()->where('scene_id', $scene_id);
+
+        if (isset($day)) {
+            $query->where('created_at', '>=', $day);
+        } else {
+            $query->whereDate('created_at', Carbon::parse($request->days)->toDateString());
+        }
+
+        $wears = $query
             ->selectRaw('HOUR(created_at) as hour, COUNT(*) as count')
             ->groupByRaw('HOUR(created_at)')
             ->orderBy('hour', 'asc')
@@ -78,8 +87,14 @@ class DeviceController extends Controller
         $wears = $temp;
 
         // 访问量
-        $visits = DeviceVisit::where('scene_id', $scene_id)
-            ->where('created_at', '>=', $day)
+        $query = DeviceVisit::query()->where('scene_id', $scene_id);
+        if (isset($day)) {
+            $query->where('created_at', '>=', $day);
+        } else {
+            $query->whereDate('created_at', Carbon::parse($request->days)->toDateString());
+        }
+
+        $visits = $query
             ->selectRaw('HOUR(created_at) as hour, COUNT(*) as count')
             ->groupByRaw('HOUR(created_at)')
             ->orderBy('hour', 'asc')
